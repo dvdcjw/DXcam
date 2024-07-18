@@ -147,6 +147,9 @@ class DXCamera:
         self.__stop_capture.clear()
 
     def get_latest_frame(self):
+        if not self.is_capturing:
+            raise capture_error(
+                'camera is not started. camera.get_latest_frame unavailable.\nDid you forgot to run camera.start?')
         self.__frame_available.wait()
         with self.__lock:
             ret = self.__frame_buffer[(self.__head - 1) % self.max_buffer_len]
